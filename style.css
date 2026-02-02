@@ -114,4 +114,24 @@
       margin: 50px auto;
     }
   }
+  /* Final polish for mobile & readability */
+section + section {
+    border-top: 1px solid #e6ebef;
+    padding-top: 40px;
+  }
+  
+  @media (max-width: 480px) {
+    body {
+      font-size: 15px;
+    }
+  
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  
+    ul li {
+      font-size: 1rem;
+    }
+  }
   
