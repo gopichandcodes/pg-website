@@ -63,7 +63,7 @@
     const whatsappFallback = `https://wa.me/${whatsappNumber}`;
     
     // Find all WhatsApp links
-    const whatsappLinks = document.querySelectorAll('#whatsapp-btn, #whatsapp-contact');
+    const whatsappLinks = document.querySelectorAll('#whatsapp-btn, #whatsapp-contact, #whatsapp-cta');
     
     whatsappLinks.forEach(link => {
       // Set the primary URL

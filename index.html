@@ -14,12 +14,16 @@
   <!-- Fixed Header / Navigation -->
   <header class="site-header" id="site-header">
     <nav class="nav-container">
-      <a href="#hero" class="nav-brand">Sree Lakshya</a>
+      <a href="#hero" class="nav-brand">
+        <span class="nav-brand-main">Sree Lakshya</span>
+        <span class="nav-brand-sub">Premium Ladies PG</span>
+      </a>
       <ul class="nav-links">
         <li><a href="#hero" class="nav-link">Home</a></li>
         <li><a href="#about" class="nav-link">About</a></li>
         <li><a href="#facilities" class="nav-link">Facilities</a></li>
-        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <!-- Gallery link hidden until real property images are uploaded -->
+        <!-- <li><a href="#gallery" class="nav-link">Gallery</a></li> -->
         <li><a href="#location" class="nav-link">Location</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -40,16 +44,12 @@
     <div class="hero-content">
       <h1 class="fade-in-up">Sree Lakshya</h1>
       <p class="fade-in-up delay-1">Premium Ladies PG</p>
+      <p class="legacy-note fade-in-up delay-1">Previously known as New Minerva Living For Ladies PG</p>
       <a href="https://wa.me/916363187007?text=Hi%2C%20I%20am%20interested%20in%20Sree%20Lakshya%20%E2%80%93%20Premium%20Ladies%20PG.%20Please%20share%20room%20availability%2C%20rent%2C%20and%20admission%20process." 
          class="btn fade-in-up delay-2" 
          id="whatsapp-btn"
          aria-label="Contact us on WhatsApp">
         Book Your Spot Now
-      </a>
-      <a href="#about" class="scroll-indicator fade-in-up delay-3" aria-label="Scroll to about section">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 9l6 6 6-6"/>
-        </svg>
       </a>
     </div>
   </header>
@@ -121,7 +121,8 @@
   </section>
 
   <!-- Gallery -->
-  <section id="gallery" class="gallery scroll-fade-in">
+  <!-- Gallery hidden until real property images are uploaded -->
+  <section id="gallery" class="gallery scroll-fade-in is-hidden">
     <h2>Gallery</h2>
     <p class="gallery-intro">Experience the comfort and elegance of Sree Lakshya</p>
     <div class="gallery-grid">
@@ -160,15 +161,17 @@
   <!-- Location -->
   <section id="location" class="location scroll-fade-in">
     <h2>Location</h2>
+    <p class="rebrand-note">Previously known as New Minerva Living For Ladies PG, now rebranded as Sree Lakshya – Premium Ladies PG</p>
     <div class="location-content">
       <div class="location-address">
         <p>
-          <strong>Kaverappa Layout,</strong><br />
+          <strong>2 2nd B Cross, Vidya Vikas School Rd,</strong><br />
+          New Kavereppa Layout,<br />
           Kadubeesanahalli,<br />
-          Bangalore – 560103
+          Bengaluru, Karnataka 560103
         </p>
         <a 
-          href="https://www.google.com/maps/search/?api=1&query=Kaverappa+Layout,+Kadubeesanahalli,+Bangalore+560103" 
+          href="https://www.google.com/maps/search/?api=1&query=2+2nd+B+Cross,+Vidya+Vikas+School+Rd,+New+Kavereppa+Layout,+Kadubeesanahalli,+Bengaluru,+Karnataka+560103,+India" 
           class="map-link"
           target="_blank"
           rel="noopener noreferrer"
@@ -178,14 +181,9 @@
         </a>
       </div>
       <div class="map-container">
-        <!-- Google Maps Embed - Kaverappa Layout, Kadubeesanahalli, Bangalore -->
-        <!-- NOTE: This is a placeholder embed. To get the actual embed URL: -->
-        <!-- 1. Go to https://www.google.com/maps -->
-        <!-- 2. Search for "Kaverappa Layout, Kadubeesanahalli, Bangalore 560103" -->
-        <!-- 3. Click "Share" > "Embed a map" -->
-        <!-- 4. Copy the iframe src URL and replace the src below -->
+        <!-- Google Maps Embed - 2 2nd B Cross, Vidya Vikas School Rd, New Kavereppa Layout, Kadubeesanahalli, Bengaluru, Karnataka 560103, India -->
         <iframe 
-          src="https://www.google.com/maps?q=Kaverappa+Layout,+Kadubeesanahalli,+Bangalore+560103&output=embed"
+          src="https://www.google.com/maps?q=2+2nd+B+Cross,+Vidya+Vikas+School+Rd,+New+Kavereppa+Layout,+Kadubeesanahalli,+Bengaluru,+Karnataka+560103,+India&output=embed"
           width="100%" 
           height="400" 
           style="border:0;" 
@@ -193,7 +191,7 @@
           loading="lazy" 
           referrerpolicy="no-referrer-when-downgrade"
           title="Sree Lakshya Premium Ladies PG Location"
-          aria-label="Interactive map showing Sree Lakshya location in Kaverappa Layout, Kadubeesanahalli, Bangalore"
+          aria-label="Interactive map showing Sree Lakshya location at 2 2nd B Cross, Vidya Vikas School Rd, New Kavereppa Layout, Kadubeesanahalli, Bengaluru"
         ></iframe>
       </div>
     </div>
@@ -203,21 +201,53 @@
   <section id="contact" class="contact scroll-fade-in">
     <h2>Contact Us</h2>
     <div class="contact-content">
-      <p>
-        <strong>📞 Call / WhatsApp:</strong><br />
-        <a href="https://wa.me/916363187007?text=Hi%2C%20I%20am%20interested%20in%20Sree%20Lakshya%20%E2%80%93%20Premium%20Ladies%20PG.%20Please%20share%20room%20availability%2C%20rent%2C%20and%20admission%20process." 
-           class="contact-link"
-           id="whatsapp-contact"
-           aria-label="Contact us on WhatsApp">
-          +91 6363187007
-        </a>
-      </p>
-      <p>
-        <strong>📧 Email:</strong><br />
-        <a href="mailto:sriramguntupalli2@gmail.com" class="contact-link" aria-label="Send us an email">
-          sriramguntupalli2@gmail.com
-        </a>
-      </p>
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <div class="contact-info">
+          <div class="contact-label">Call / WhatsApp</div>
+          <div class="contact-value">
+            <a href="tel:+916363187007" class="contact-link" aria-label="Call us">
+              +91 6363187007
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">💬</div>
+        <div class="contact-info">
+          <div class="contact-label">WhatsApp</div>
+          <div class="contact-value">
+            <a href="https://wa.me/916363187007?text=Hi%2C%20I%20am%20interested%20in%20Sree%20Lakshya%20%E2%80%93%20Premium%20Ladies%20PG.%20Please%20share%20room%20availability%2C%20rent%2C%20and%20admission%20process." 
+               class="contact-link contact-whatsapp"
+               id="whatsapp-contact"
+               aria-label="Contact us on WhatsApp">
+              Message on WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📧</div>
+        <div class="contact-info">
+          <div class="contact-label">Email</div>
+          <div class="contact-value">
+            <a href="mailto:sriramguntupalli2@gmail.com" class="contact-link" aria-label="Send us an email">
+              sriramguntupalli2@gmail.com
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <div class="contact-info">
+          <div class="contact-label">Address</div>
+          <div class="contact-value">
+            2 2nd B Cross, Vidya Vikas School Rd,<br />
+            New Kavereppa Layout, Kadubeesanahalli,<br />
+            Bengaluru, Karnataka 560103
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
