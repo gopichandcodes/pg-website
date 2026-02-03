@@ -266,6 +266,8 @@
         initHeaderScroll();
         initBackToTop();
         initSmoothScrollNav();
+        initReviewsSlider();
+        initReviewCardActivation();
       });
     } else {
       // DOM is already ready
@@ -276,7 +278,313 @@
       initHeaderScroll();
       initBackToTop();
       initSmoothScrollNav();
+      initReviewsSlider();
+      initReviewCardActivation();
     }
+  };
+
+  // ============================================
+  // REVIEWS SLIDER - PREMIUM AUTO-SLIDE
+  // ============================================
+  
+  const initReviewsSlider = function() {
+    const reviewsSection = document.getElementById('reviews');
+    const reviewsTrack = document.getElementById('reviews-track');
+    const prevBtn = document.getElementById('review-prev');
+    const nextBtn = document.getElementById('review-next');
+    const reviewCards = document.querySelectorAll('.review-card');
+    
+    if (!reviewsSection || !reviewsTrack || !prevBtn || !nextBtn) return;
+    
+    let currentIndex = 0;
+    let autoSlideInterval = null;
+    let pauseTimeout = null;
+    let isPaused = false;
+    let isInViewport = false;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const totalReviews = reviewCards.length;
+    
+    // Get cards per view based on current window size
+    const getCardsPerView = function() {
+      const width = window.innerWidth;
+      if (width <= 480) return 1;
+      if (width <= 768) return 2;
+      return 3;
+    };
+    
+    // Check if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const autoSlideDelay = prefersReducedMotion ? 0 : 4500; // 4.5 seconds
+    const resumeDelay = 5500; // 5.5 seconds after pause
+    
+    // Update active card highlighting
+    const updateActiveCards = function() {
+      const cardsPerView = getCardsPerView();
+      let activeIndex;
+      
+      if (cardsPerView === 1) {
+        // Mobile: highlight the visible card
+        activeIndex = currentIndex;
+      } else if (cardsPerView === 2) {
+        // Tablet: highlight the first visible card
+        activeIndex = currentIndex;
+      } else {
+        // Desktop: highlight the center card
+        activeIndex = currentIndex + 1;
+      }
+      
+      reviewCards.forEach(function(card, index) {
+        if (index === activeIndex && activeIndex < totalReviews) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+    };
+    
+    // Update slider position
+    const updateSlider = function() {
+      if (reviewCards.length === 0) return;
+      const cardWidth = reviewCards[0].offsetWidth;
+      const cardMargin = parseInt(getComputedStyle(reviewCards[0]).marginLeft) || 0;
+      const totalCardWidth = cardWidth + (cardMargin * 2);
+      const translateX = -(currentIndex * totalCardWidth);
+      reviewsTrack.style.transform = `translateX(${translateX}px)`;
+    };
+    
+    // Helper to deactivate any active review card when sliding
+    const deactivateActiveReviewCard = function() {
+      if (typeof initReviewCardActivation.deactivateAll === 'function') {
+        initReviewCardActivation.deactivateAll();
+      }
+    };
+
+    // Go to next slide
+    const nextSlide = function() {
+      const cardsPerView = getCardsPerView();
+      const maxIndex = Math.max(0, totalReviews - cardsPerView);
+      currentIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1;
+      deactivateActiveReviewCard();
+      updateActiveCards(); // Update immediately
+      updateSlider();
+      pauseAutoSlide();
+    };
+    
+    // Go to previous slide
+    const prevSlide = function() {
+      const cardsPerView = getCardsPerView();
+      const maxIndex = Math.max(0, totalReviews - cardsPerView);
+      currentIndex = currentIndex <= 0 ? maxIndex : currentIndex - 1;
+      deactivateActiveReviewCard();
+      updateActiveCards(); // Update immediately
+      updateSlider();
+      pauseAutoSlide();
+    };
+    
+    // Start auto-slide
+    const startAutoSlide = function() {
+      if (prefersReducedMotion || !isInViewport || isPaused) return;
+      
+      autoSlideInterval = setInterval(function() {
+        if (!isPaused && isInViewport) {
+          nextSlide();
+        }
+      }, autoSlideDelay);
+    };
+    
+    // Pause auto-slide
+    const pauseAutoSlide = function() {
+      isPaused = true;
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+      }
+      
+      // Clear existing resume timeout
+      if (pauseTimeout) {
+        clearTimeout(pauseTimeout);
+      }
+      
+      // Resume after inactivity
+      pauseTimeout = setTimeout(function() {
+        isPaused = false;
+        if (isInViewport) {
+          startAutoSlide();
+        }
+      }, resumeDelay);
+    };
+    
+    // Check if section is in viewport
+    const checkViewport = function() {
+      const rect = reviewsSection.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      
+      // Section is visible if any part of it is in the viewport
+      const isVisible = (
+        rect.top < windowHeight &&
+        rect.bottom > 0 &&
+        rect.left < window.innerWidth &&
+        rect.right > 0
+      );
+      
+      if (isVisible && !isInViewport) {
+        isInViewport = true;
+        if (!isPaused && !prefersReducedMotion) {
+          startAutoSlide();
+        }
+      } else if (!isVisible && isInViewport) {
+        isInViewport = false;
+        if (autoSlideInterval) {
+          clearInterval(autoSlideInterval);
+          autoSlideInterval = null;
+        }
+      }
+  };
+  
+  // ============================================
+  // REVIEWS - CARD ACTIVATE / SCROLL BEHAVIOR
+  // ============================================
+  // - No buttons, no text measurement
+  // - Each card shows preview (overflow hidden)
+  // - Clicking a card activates it and allows vertical scroll
+  // - Only one card active at a time
+  const initReviewCardActivation = function() {
+    if (!reviewCards.length) return;
+
+    const deactivateAll = function() {
+      reviewCards.forEach(function(card) {
+        card.classList.remove('is-review-active');
+        const textEl = card.querySelector('.review-text');
+        if (textEl) {
+          textEl.classList.remove('expanded');
+          textEl.scrollTop = 0;
+        }
+      });
+    };
+
+    // Expose helper inside slider scope so next/prev can use it
+    initReviewCardActivation.deactivateAll = deactivateAll;
+
+    reviewCards.forEach(function(card) {
+      const textEl = card.querySelector('.review-text');
+      if (!textEl) return;
+
+      card.style.cursor = 'pointer';
+
+      card.addEventListener('click', function(e) {
+        // Ignore clicks on nav buttons inside section, if any
+        if (e.target.closest('.review-nav')) return;
+
+        const alreadyActive = card.classList.contains('is-review-active');
+        deactivateAll();
+
+        if (!alreadyActive) {
+          card.classList.add('is-review-active');
+          textEl.classList.add('expanded');
+        }
+
+        pauseAutoSlide();
+      });
+    });
+  };
+    
+    // Touch/swipe support for mobile
+    const initTouchSupport = function() {
+      reviewsTrack.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        pauseAutoSlide();
+      }, { passive: true });
+      
+      reviewsTrack.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+      
+      function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+      }
+    };
+    
+    // Event listeners
+    nextBtn.addEventListener('click', function() {
+      nextSlide();
+    });
+    
+    prevBtn.addEventListener('click', function() {
+      prevSlide();
+    });
+    
+    // Keyboard navigation
+    reviewsSection.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextSlide();
+      }
+    });
+    
+    // Pause on hover (desktop only)
+    if (!isMobile) {
+      reviewsSection.addEventListener('mouseenter', function() {
+        pauseAutoSlide();
+      });
+      
+      reviewsSection.addEventListener('mouseleave', function() {
+        if (isInViewport) {
+          pauseAutoSlide(); // Will resume after timeout
+        }
+      });
+    }
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        // Reset to first slide if needed
+        const cardsPerView = getCardsPerView();
+        const maxIndex = Math.max(0, totalReviews - cardsPerView);
+        if (currentIndex > maxIndex) {
+          currentIndex = 0;
+        }
+        updateSlider();
+        updateActiveCards();
+        if (autoSlideInterval) {
+          clearInterval(autoSlideInterval);
+          autoSlideInterval = null;
+        }
+        if (isInViewport && !isPaused) {
+          startAutoSlide();
+        }
+      }, 250);
+    });
+    
+    // Initialize
+    updateSlider();
+    updateActiveCards();
+    initReviewCardActivation();
+    initTouchSupport();
+    
+    // Check viewport on scroll
+    window.addEventListener('scroll', function() {
+      checkViewport();
+    }, { passive: true });
+    
+    // Initial viewport check
+    checkViewport();
   };
 
   // Start initialization
